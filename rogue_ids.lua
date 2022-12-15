@@ -340,9 +340,11 @@ local ConRO_Rogue, ids = ...;
 	}
 	ids.Out_Buff = {
 		AdrenalineRush = 13750,
+		Audacity = 386270,
 		BladeFlurry = 13877,
 		Broadside = 193356,
 		BuriedTreasure = 199600,
+		Dreadblades = 343142,
 		InstantPoison = 315584,
 		GrandMelee = 193358,
 		LoadedDice = 256171,
@@ -506,6 +508,7 @@ local ConRO_Rogue, ids = ...;
 		Premeditation = 343173,
 	}
 	ids.Sub_Buff = {
+		ColdBlood = 382245,
 		InstantPoison = 315584,
 		ShadowBlades = 121471,
 		ShadowDance = 185422,
