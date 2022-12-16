@@ -739,12 +739,19 @@ function ConRO.Rogue.Outlaw(_, timeShift, currentSpell, gcd, tChosen, pvpChosen)
 			tinsert(ConRO.SuggestedSpells, _Stealth);
 		end
 
+		if _AdrenalineRush_RDY and ConRO:FullMode(_AdrenalineRush) then
+			tinsert(ConRO.SuggestedSpells, _AdrenalineRush);
+			_AdrenalineRush_RDY = false;
+		end
+
 		if _RolltheBones_RDY and _should_Roll and ConRO:FullMode(_RolltheBones) then
 			tinsert(ConRO.SuggestedSpells, _RolltheBones);
 		end
 
-		if _SliceandDice_RDY and not _SliceandDice_BUFF and _Combo >= (_Combo_Max - 2) then
-			tinsert(ConRO.SuggestedSpells, _SliceandDice);
+		if _BetweentheEyes_RDY and (_Combo >= _Combo_Max or _Combo == EchoingReprimand_COUNT) then
+			tinsert(ConRO.SuggestedSpells, _BetweentheEyes);
+			_BetweentheEyes_RDY = false;
+			_Combo = 0;
 		end
 
 		if _Dispatch_RDY and (_Combo >= (_Combo_Max - 1) or _Combo == EchoingReprimand_COUNT) then
@@ -755,6 +762,10 @@ function ConRO.Rogue.Outlaw(_, timeShift, currentSpell, gcd, tChosen, pvpChosen)
 			tinsert(ConRO.SuggestedSpells, _Ambush);
 		end
 	elseif _combat_stealth then
+		if _BetweentheEyes_RDY and (_Combo >= _Combo_Max or _Combo == EchoingReprimand_COUNT) then
+			tinsert(ConRO.SuggestedSpells, _BetweentheEyes);
+		end
+
 		if _Dispatch_RDY and (_Combo >= (_Combo_Max - 1) or _Combo == EchoingReprimand_COUNT) then
 			tinsert(ConRO.SuggestedSpells, _Dispatch);
 		end
@@ -788,12 +799,6 @@ function ConRO.Rogue.Outlaw(_, timeShift, currentSpell, gcd, tChosen, pvpChosen)
 			_BladeFlurry_RDY = false;
 		end
 
-		if _SliceandDice_RDY and _Combo >= _Combo_Max and not _SliceandDice_BUFF then
-			tinsert(ConRO.SuggestedSpells, _SliceandDice);
-			_SliceandDice_RDY = false;
-			_Combo = 0;
-		end
-
 		if _ColdBlood_RDY and _BetweentheEyes_RDY and (_Combo >= _Combo_Max or _Combo == EchoingReprimand_COUNT) and ConRO:FullMode(_ColdBlood) then
 			tinsert(ConRO.SuggestedSpells, _ColdBlood);
 			_ColdBlood_RDY = false;
@@ -805,6 +810,12 @@ function ConRO.Rogue.Outlaw(_, timeShift, currentSpell, gcd, tChosen, pvpChosen)
 			_Combo = 0;
 		end
 
+		if _SliceandDice_RDY and _Combo >= _Combo_Max and not _SliceandDice_BUFF then
+			tinsert(ConRO.SuggestedSpells, _SliceandDice);
+			_SliceandDice_RDY = false;
+			_Combo = 0;
+		end
+		
 		if _Dispatch_RDY and (_Combo >= _Combo_Max or _Combo == EchoingReprimand_COUNT) then
 			tinsert(ConRO.SuggestedSpells, _Dispatch);
 			_Dispatch_RDY = false;
