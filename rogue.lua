@@ -497,7 +497,7 @@ function ConRO.Rogue.Assassination(_, timeShift, currentSpell, gcd, tChosen, pvp
 			_Combo = _Combo + 2;
 		end
 
-		if _Mutilate_RDY and _Combo <= (_Combo_Max - 1) and ((ConRO_AutoButton:IsVisible() and _enemies_in_melee <= 2) or ConRO_SingleButton:IsVisible()) then
+		if _Mutilate_RDY and _Combo <= (_Combo_Max - 1) then
 			tinsert(ConRO.SuggestedSpells, _Mutilate);
 			_Combo = _Combo + 2;
 		end
@@ -577,7 +577,7 @@ function ConRO.Rogue.Outlaw(_, timeShift, currentSpell, gcd, tChosen, pvpChosen)
 		local _Audacity_BUFF = ConRO:Aura(Buff.Audacity, timeShift);
 	local _BetweentheEyes, _BetweentheEyes_RDY																		= ConRO:AbilityReady(Ability.BetweentheEyes, timeShift);
 	local _BladeFlurry, _BladeFlurry_RDY																					= ConRO:AbilityReady(Ability.BladeFlurry, timeShift);
-		local _BladeFlurry_BUFF																												= ConRO:Aura(Buff.BladeFlurry, timeShift);
+		local _BladeFlurry_BUFF																												= ConRO:Aura(Buff.BladeFlurry, timeShift + 1);
 		local _BladeFlurry_CHARGES																									= ConRO:SpellCharges(_BladeFlurry);
 	local _BladeRush, _BladeRush_RDY, _BladeRush_CD																= ConRO:AbilityReady(Ability.BladeRush, timeShift);
 	local _Dispatch, _Dispatch_RDY = ConRO:AbilityReady(Ability.Dispatch, timeShift);
@@ -1087,12 +1087,6 @@ function ConRO.Rogue.Subtlety(_, timeShift, currentSpell, gcd, tChosen, pvpChose
 
 				if _Rupture_RDY and not _Rupture_DEBUFF then
 					tinsert(ConRO.SuggestedSpells, _Rupture);
-				end
-			end
-
-			if not _target_in_melee and _in_combat then
-				if _ShurikenToss_RDY and _Combo <= _Combo_Max - 1 or _Target_Percent_Health <= 5 then
-					tinsert(ConRO.SuggestedSpells, _ShurikenToss);
 				end
 			end
 

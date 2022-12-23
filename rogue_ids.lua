@@ -236,7 +236,7 @@ local ConRO_Rogue, ids = ...;
 		KillingSpree = {spellID = 51690, talentID = 112551},
 		PistolShot = {spellID = 185763},
 		RolltheBones = {spellID = 315508, talentID = 112543},
-		Sepsis = {spellID = 328408, talentID = 112565},
+		Sepsis = {spellID = 385408, talentID = 112565},
 		--Poisons
 			Poisons = {
 				AtrophicPoison = {spellID = 381637, talentID = 112655},
