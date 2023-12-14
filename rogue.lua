@@ -215,7 +215,6 @@ function ConRO.Rogue.Assassination(_, timeShift, currentSpell, gcd, tChosen, pvp
 	local _FanofKnives, _FanofKnives_RDY = ConRO:AbilityReady(Ability.FanofKnives, timeShift);
 	local _Garrote, _Garrote_RDY = ConRO:AbilityReady(Ability.Garrote, timeShift);
 		local _Garrote_DEBUFF, _, _Garrote_DUR = ConRO:TargetAura(Debuff.Garrote, timeShift);
-	local _IndiscriminateCarnage, _IndiscriminateCarnage_RDY = ConRO:AbilityReady(Ability.IndiscriminateCarnage, timeShift);
 	local _Kick, _Kick_RDY = ConRO:AbilityReady(Ability.Kick, timeShift);
 	local _Kingsbane, _Kingsbane_RDY = ConRO:AbilityReady(Ability.Kingsbane, timeShift);
 		local _Kingsbane_DEBUFF, _, _Kingsbane_DUR = ConRO:TargetAura(Debuff.Kingsbane, timeShift);
@@ -309,11 +308,6 @@ function ConRO.Rogue.Assassination(_, timeShift, currentSpell, gcd, tChosen, pvp
 			_SliceandDice_BUFF = true;
 		end
 
-		if _IndiscriminateCarnage_RDY and not _combat_stealth and (ConRO_AutoButton:IsVisible() and _enemies_in_melee >= 2) then
-			tinsert(ConRO.SuggestedSpells, _IndiscriminateCarnage);
-			_IndiscriminateCarnage_RDY = false;
-		end
-
 		if _Rupture_RDY and not _Rupture_DEBUFF and _Combo >= 5 then
 			tinsert(ConRO.SuggestedSpells, _Rupture);
 			_Rupture_DEBUFF = true;
@@ -351,11 +345,6 @@ function ConRO.Rogue.Assassination(_, timeShift, currentSpell, gcd, tChosen, pvp
 		tinsert(ConRO.SuggestedSpells, _CrimsonTempest);
 		_CrimsonTempest_RDY = false;
 		_Combo = 0;
-	end
-
-	if _IndiscriminateCarnage_RDY and not _combat_stealth and (ConRO_AutoButton:IsVisible() and _enemies_in_melee >= 2) then
-		tinsert(ConRO.SuggestedSpells, _IndiscriminateCarnage);
-		_IndiscriminateCarnage_RDY = false;
 	end
 
 	if _ShadowDance_RDY and not _combat_stealth and ConRO:FullMode(_ShadowDance) then
