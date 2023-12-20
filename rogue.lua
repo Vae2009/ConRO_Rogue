@@ -160,7 +160,7 @@ function ConRO.Rogue.Under10Def(_, timeShift, currentSpell, gcd, tChosen, pvpCho
 --Conditions
 	local _is_moving = ConRO:PlayerSpeed();
 	local _enemies_in_melee, _target_in_melee = ConRO:Targets("Melee");
-	local _target_in_10yrds = CheckInteractDistance("target", 3);
+	local _enemies_in_10yrds, _target_in_10yrds = ConRO:Targets("10");
 
 --Warnings
 
@@ -844,7 +844,7 @@ function ConRO.Rogue.OutlawDef(_, timeShift, currentSpell, gcd, tChosen, pvpChos
 --Conditions
 	local _is_moving = ConRO:PlayerSpeed();
 	local _enemies_in_melee, _target_in_melee = ConRO:Targets("Melee");
-	local _target_in_10yrds = CheckInteractDistance("target", 3);
+	local _enemies_in_10yrds, _target_in_10yrds = ConRO:Targets("10");
 
 	local _is_stealthed = IsStealthed();
 
