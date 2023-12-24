@@ -207,9 +207,7 @@ function ConRO.Rogue.Assassination(_, timeShift, currentSpell, gcd, tChosen, pvp
 		local _CrimsonTempest_DEBUFF = ConRO:TargetAura(Debuff.CrimsonTempest, timeShift + 2);
 	local _Deathmark, _Deathmark_RDY = ConRO:AbilityReady(Ability.Deathmark, timeShift);
 	local _EchoingReprimand, _EchoingReprimand_RDY = ConRO:AbilityReady(Ability.EchoingReprimand, timeShift);
-		local _EchoingReprimand_2_BUFF = ConRO:Aura(Buff.EchoingReprimand_2, timeShift);
-		local _EchoingReprimand_3_BUFF = ConRO:Aura(Buff.EchoingReprimand_3, timeShift);
-		local _EchoingReprimand_4_BUFF = ConRO:Aura(Buff.EchoingReprimand_4, timeShift);
+		local _EchoingReprimand_Match = ConRO:EchoingReprimand();
 	local _Envenom, _Envenom_RDY = ConRO:AbilityReady(Ability.Envenom, timeShift);
 		local _Envenom_BUFF = ConRO:Aura(Buff.Envenom, timeShift + 1);
 	local _FanofKnives, _FanofKnives_RDY = ConRO:AbilityReady(Ability.FanofKnives, timeShift);
@@ -271,17 +269,6 @@ function ConRO.Rogue.Assassination(_, timeShift, currentSpell, gcd, tChosen, pvp
 			_Poison_applied = true;
 		end
 
-	local EchoingReprimand_COUNT = 0;
-		if _EchoingReprimand_2_BUFF then
-			EchoingReprimand_COUNT = 2;
-		end
-		if _EchoingReprimand_3_BUFF then
-			EchoingReprimand_COUNT = 3;
-		end
-		if _EchoingReprimand_4_BUFF then
-			EchoingReprimand_COUNT = 4;
-		end
-
 --Indicators
 	ConRO:AbilityInterrupt(_Kick, _Kick_RDY and ConRO:Interrupt());
 	ConRO:AbilityPurge(_ArcaneTorrent, _ArcaneTorrent_RDY and _target_in_melee and ConRO:Purgable());
@@ -341,7 +328,7 @@ function ConRO.Rogue.Assassination(_, timeShift, currentSpell, gcd, tChosen, pvp
 		_SerratedBoneSpike_BUFF = true;
 	end
 
-	if _CrimsonTempest_RDY and not _CrimsonTempest_DEBUFF and (_Combo >= (_Combo_Max - 1) or _Combo == EchoingReprimand_COUNT) and (ConRO_AutoButton:IsVisible() and _enemies_in_melee >= 2) then
+	if _CrimsonTempest_RDY and not _CrimsonTempest_DEBUFF and (_Combo >= (_Combo_Max - 1) or _EchoingReprimand_Match) and (ConRO_AutoButton:IsVisible() and _enemies_in_melee >= 2) then
 		tinsert(ConRO.SuggestedSpells, _CrimsonTempest);
 		_CrimsonTempest_RDY = false;
 		_Combo = 0;
@@ -356,7 +343,7 @@ function ConRO.Rogue.Assassination(_, timeShift, currentSpell, gcd, tChosen, pvp
 		_Garrote_RDY = false;
 	end
 
-	if _Rupture_RDY and not _Rupture_DEBUFF and (_Combo >= (_Combo_Max - 1) or _Combo == EchoingReprimand_COUNT) then
+	if _Rupture_RDY and not _Rupture_DEBUFF and (_Combo >= (_Combo_Max - 1) or _EchoingReprimand_Match) then
 		tinsert(ConRO.SuggestedSpells, _Rupture);
 		_Rupture_DEBUFF = true;
 		_Combo = 0;
@@ -420,7 +407,7 @@ function ConRO.Rogue.Assassination(_, timeShift, currentSpell, gcd, tChosen, pvp
 		_Combo = _Combo + 1 + _SerratedBoneSpike_COUNT;
 	end
 
-	if _Envenom_RDY and not _Envenom_BUFF and (_Combo >= (_Combo_Max - 1) or _Combo == EchoingReprimand_COUNT) then
+	if _Envenom_RDY and not _Envenom_BUFF and (_Combo >= (_Combo_Max - 1) or _EchoingReprimand_Match) then
 		tinsert(ConRO.SuggestedSpells, _Envenom);
 		_Envenom_RDY = false;
 		_Combo = 0;
@@ -436,13 +423,13 @@ function ConRO.Rogue.Assassination(_, timeShift, currentSpell, gcd, tChosen, pvp
 		_Combo = _Combo + 1;
 	end
 
-	if _CrimsonTempest_RDY and (_Combo >= (_Combo_Max - 1) or _Combo == EchoingReprimand_COUNT) and (ConRO_AutoButton:IsVisible() and _enemies_in_melee >= 6) then
+	if _CrimsonTempest_RDY and (_Combo >= (_Combo_Max - 1) or _EchoingReprimand_Match) and (ConRO_AutoButton:IsVisible() and _enemies_in_melee >= 6) then
 		tinsert(ConRO.SuggestedSpells, _CrimsonTempest);
 		_CrimsonTempest_RDY = false;
 		_Combo = 0;
 	end
 
-	if _Envenom_RDY and (_Combo >= (_Combo_Max - 1) or _Combo == EchoingReprimand_COUNT) and (ConRO_AutoButton:IsVisible() and _enemies_in_melee < 6) then
+	if _Envenom_RDY and (_Combo >= (_Combo_Max - 1) or _EchoingReprimand_Match) and (ConRO_AutoButton:IsVisible() and _enemies_in_melee < 6) then
 		tinsert(ConRO.SuggestedSpells, _Envenom);
 		_Envenom_RDY = false;
 		_Combo = 0;
@@ -581,9 +568,7 @@ function ConRO.Rogue.Outlaw(_, timeShift, currentSpell, gcd, tChosen, pvpChosen)
 	local _KillingSpree, _KillingSpree_RDY, _KillingSpree_CD = ConRO:AbilityReady(Ability.KillingSpree, timeShift);
 	local _Subterfuge_Stealth, _Subterfuge_Stealth_RDY = ConRO:AbilityReady(Ability.Subterfuge_Stealth, timeShift);
 	local _EchoingReprimand, _EchoingReprimand_RDY = ConRO:AbilityReady(Ability.EchoingReprimand, timeShift);
-		local _EchoingReprimand_2_BUFF = ConRO:Aura(Buff.EchoingReprimand_2, timeShift);
-		local _EchoingReprimand_3_BUFF = ConRO:Aura(Buff.EchoingReprimand_3, timeShift);
-		local _EchoingReprimand_4_BUFF = ConRO:Aura(Buff.EchoingReprimand_4, timeShift);
+		local _EchoingReprimand_Match = ConRO:EchoingReprimand();
 	local _Sepsis, _Sepsis_RDY = ConRO:AbilityReady(Ability.Sepsis, timeShift);
 
 --Conditions
@@ -645,17 +630,6 @@ function ConRO.Rogue.Outlaw(_, timeShift, currentSpell, gcd, tChosen, pvpChosen)
 			_Poison_applied = true;
 		end
 
-	local EchoingReprimand_COUNT = 0;
-		if _EchoingReprimand_2_BUFF then
-			EchoingReprimand_COUNT = 2;
-		end
-		if _EchoingReprimand_3_BUFF then
-			EchoingReprimand_COUNT = 3;
-		end
-		if _EchoingReprimand_4_BUFF then
-			EchoingReprimand_COUNT = 4;
-		end
-
 		if _RolltheBones_BUFF.Broadside or _Opportunity_BUFF then
 			_Combo_Max = _Combo_Max - 1;
 		end
@@ -694,13 +668,13 @@ function ConRO.Rogue.Outlaw(_, timeShift, currentSpell, gcd, tChosen, pvpChosen)
 			tinsert(ConRO.SuggestedSpells, _RolltheBones);
 		end
 
-		if _BetweentheEyes_RDY and (_Combo >= _Combo_Max or _Combo == EchoingReprimand_COUNT) then
+		if _BetweentheEyes_RDY and (_Combo >= _Combo_Max or _EchoingReprimand_Match) then
 			tinsert(ConRO.SuggestedSpells, _BetweentheEyes);
 			_BetweentheEyes_RDY = false;
 			_Combo = 0;
 		end
 
-		if _Dispatch_RDY and (_Combo >= (_Combo_Max - 1) or _Combo == EchoingReprimand_COUNT) then
+		if _Dispatch_RDY and (_Combo >= (_Combo_Max - 1) or _EchoingReprimand_Match) then
 			tinsert(ConRO.SuggestedSpells, _Dispatch);
 		end
 
@@ -708,11 +682,11 @@ function ConRO.Rogue.Outlaw(_, timeShift, currentSpell, gcd, tChosen, pvpChosen)
 			tinsert(ConRO.SuggestedSpells, _Ambush);
 		end
 	elseif _combat_stealth then
-		if _BetweentheEyes_RDY and (_Combo >= _Combo_Max or _Combo == EchoingReprimand_COUNT) then
+		if _BetweentheEyes_RDY and (_Combo >= _Combo_Max or _EchoingReprimand_Match) then
 			tinsert(ConRO.SuggestedSpells, _BetweentheEyes);
 		end
 
-		if _Dispatch_RDY and (_Combo >= (_Combo_Max - 1) or _Combo == EchoingReprimand_COUNT) then
+		if _Dispatch_RDY and (_Combo >= (_Combo_Max - 1) or _EchoingReprimand_Match) then
 			tinsert(ConRO.SuggestedSpells, _Dispatch);
 		end
 
@@ -745,12 +719,12 @@ function ConRO.Rogue.Outlaw(_, timeShift, currentSpell, gcd, tChosen, pvpChosen)
 			_BladeFlurry_RDY = false;
 		end
 
-		if _ColdBlood_RDY and _BetweentheEyes_RDY and (_Combo >= _Combo_Max or _Combo == EchoingReprimand_COUNT) and ConRO:FullMode(_ColdBlood) then
+		if _ColdBlood_RDY and _BetweentheEyes_RDY and (_Combo >= _Combo_Max or _EchoingReprimand_Match) and ConRO:FullMode(_ColdBlood) then
 			tinsert(ConRO.SuggestedSpells, _ColdBlood);
 			_ColdBlood_RDY = false;
 		end
 
-		if _BetweentheEyes_RDY and (_Combo >= _Combo_Max or _Combo == EchoingReprimand_COUNT) then
+		if _BetweentheEyes_RDY and (_Combo >= _Combo_Max or _EchoingReprimand_Match) then
 			tinsert(ConRO.SuggestedSpells, _BetweentheEyes);
 			_BetweentheEyes_RDY = false;
 			_Combo = 0;
@@ -762,7 +736,7 @@ function ConRO.Rogue.Outlaw(_, timeShift, currentSpell, gcd, tChosen, pvpChosen)
 			_Combo = 0;
 		end
 
-		if _Dispatch_RDY and (_Combo >= _Combo_Max or _Combo == EchoingReprimand_COUNT) then
+		if _Dispatch_RDY and (_Combo >= _Combo_Max or _EchoingReprimand_Match) then
 			tinsert(ConRO.SuggestedSpells, _Dispatch);
 			_Dispatch_RDY = false;
 		end
@@ -929,9 +903,7 @@ function ConRO.Rogue.Subtlety(_, timeShift, currentSpell, gcd, tChosen, pvpChose
 		local _Premeditation_FORM = ConRO:Form(Form.Premeditation);
 
 	local _EchoingReprimand, _EchoingReprimand_RDY = ConRO:AbilityReady(Ability.EchoingReprimand, timeShift);
-		local _EchoingReprimand_2_BUFF = ConRO:Aura(Buff.EchoingReprimand_2, timeShift);
-		local _EchoingReprimand_3_BUFF = ConRO:Aura(Buff.EchoingReprimand_3, timeShift);
-		local _EchoingReprimand_4_BUFF = ConRO:Aura(Buff.EchoingReprimand_4, timeShift);
+		local _EchoingReprimand_Match = ConRO:EchoingReprimand();
 	local _Flagellation, _Flagellation_RDY = ConRO:AbilityReady(Ability.Flagellation, timeShift);
 		local _Flagellation_BUFF, _, _Flagellation_DUR = ConRO:Aura(Buff.Flagellation, timeShift);
 	local _Sepsis, _Sepsis_RDY = ConRO:AbilityReady(Ability.Sepsis, timeShift);
@@ -961,17 +933,6 @@ function ConRO.Rogue.Subtlety(_, timeShift, currentSpell, gcd, tChosen, pvpChose
 		_Poison_applied = true;
 	end
 
-	local EchoingReprimand_COUNT = 0;
-	if _EchoingReprimand_2_BUFF then
-		EchoingReprimand_COUNT = 2;
-	end
-	if _EchoingReprimand_3_BUFF then
-		EchoingReprimand_COUNT = 3;
-	end
-	if _EchoingReprimand_4_BUFF then
-		EchoingReprimand_COUNT = 4;
-	end
-
 --Indicators
 	ConRO:AbilityInterrupt(_Kick, _Kick_RDY and ConRO:Interrupt());
 	ConRO:AbilityInterrupt(_CheapShot, _CheapShot_RDY and (_Combo <= _Combo_Max - 1) and _is_PvP_Target and ConRO:Interrupt());
@@ -980,7 +941,7 @@ function ConRO.Rogue.Subtlety(_, timeShift, currentSpell, gcd, tChosen, pvpChose
 	ConRO:AbilityMovement(_Shadowstep, _Shadowstep_RDY and _Shadowstep_RANGE and not _target_in_melee);
 	ConRO:AbilityMovement(_Sprint, _Sprint_RDY and not _target_in_melee);
 
-	ConRO:AbilityBurst(_SecretTechnique, _SecretTechnique_RDY and (_SymbolsofDeath_BUFF or (not _SymbolsofDeath_BUFF and _SymbolsofDeath_CD > 5)) and (_Combo >= (_Combo_Max - 1) or _Combo == EchoingReprimand_COUNT) and ConRO:BurstMode(_SecretTechnique));
+	ConRO:AbilityBurst(_SecretTechnique, _SecretTechnique_RDY and (_SymbolsofDeath_BUFF or (not _SymbolsofDeath_BUFF and _SymbolsofDeath_CD > 5)) and (_Combo >= (_Combo_Max - 1) or _EchoingReprimand_Match) and ConRO:BurstMode(_SecretTechnique));
 	ConRO:AbilityBurst(_ShadowBlades, _ShadowBlades_RDY and _SymbolsofDeath_BUFF and ConRO:BurstMode(_ShadowBlades));
 	ConRO:AbilityBurst(_ShadowDance, _ShadowDance_RDY and not _combat_stealth and _SymbolsofDeath_BUFF and ConRO:BurstMode(_ShadowDance));
 	ConRO:AbilityBurst(_Shadowmeld, _Shadowmeld_RDY and not ConRO:TarYou() and not _combat_stealth and not _FindWeakness_DEBUFF and _Combo <= 0);
@@ -1042,12 +1003,12 @@ function ConRO.Rogue.Subtlety(_, timeShift, currentSpell, gcd, tChosen, pvpChose
 			tinsert(ConRO.SuggestedSpells, _ShadowDance);
 		end
 
-		if _ColdBlood_RDY and (_Combo >= _Combo_Max - 1 or _Combo == EchoingReprimand_COUNT) and ConRO:FullMode(_ColdBlood) then
+		if _ColdBlood_RDY and (_Combo >= _Combo_Max - 1 or _EchoingReprimand_Match) and ConRO:FullMode(_ColdBlood) then
 			tinsert(ConRO.SuggestedSpells, _ColdBlood);
 			_ColdBlood_RDY = false;
 		end
 
-		if _ColdBlood_BUFF and (_Combo >= (_Combo_Max - 1) or _Combo == EchoingReprimand_COUNT) then
+		if _ColdBlood_BUFF and (_Combo >= (_Combo_Max - 1) or _EchoingReprimand_Match) then
 			if _SecretTechnique_RDY and ConRO:FullMode(_SecretTechnique) then
 				tinsert(ConRO.SuggestedSpells, _SecretTechnique);
 			end
@@ -1066,7 +1027,7 @@ function ConRO.Rogue.Subtlety(_, timeShift, currentSpell, gcd, tChosen, pvpChose
 			_Sepsis_RDY = false;
 		end
 
-		if _Flagellation_RDY and (_Combo >= _Combo_Max - 1 or _Combo == EchoingReprimand_COUNT) and ConRO:FullMode(_Flagellation) then
+		if _Flagellation_RDY and (_Combo >= _Combo_Max - 1 or _EchoingReprimand_Match) and ConRO:FullMode(_Flagellation) then
 			tinsert(ConRO.SuggestedSpells, _Flagellation);
 			_Flagellation_RDY = false;
 		end
@@ -1084,7 +1045,7 @@ function ConRO.Rogue.Subtlety(_, timeShift, currentSpell, gcd, tChosen, pvpChose
 			tinsert(ConRO.SuggestedSpells, _EchoingReprimand);
 		end
 
-		if (_Combo >= _Combo_Max - 1 or (_Combo >= _Combo_Max - 2 and _ShadowDance_BUFF) or _Combo == EchoingReprimand_COUNT) then
+		if (_Combo >= _Combo_Max - 1 or (_Combo >= _Combo_Max - 2 and _ShadowDance_BUFF) or _EchoingReprimand_Match) then
 			if _SecretTechnique_RDY and ConRO:FullMode(_SecretTechnique) then
 				tinsert(ConRO.SuggestedSpells, _SecretTechnique);
 			end
@@ -1160,4 +1121,31 @@ function ConRO.Rogue.SubletyDef(_, timeShift, currentSpell, gcd, tChosen, pvpCho
 			tinsert(ConRO.SuggestedDefSpells, _Evasion);
 		end
 	return nil;
+end
+
+function ConRO:EchoingReprimand()
+	local _Combo, _Combo_Max = ConRO:PlayerPower('Combo');
+	local _EchoingReprimand_2_BUFF = ConRO:Aura(ids.Ass_Buff.EchoingReprimand_2, timeShift);
+	local _EchoingReprimand_3_BUFF = ConRO:Aura(ids.Ass_Buff.EchoingReprimand_3, timeShift);
+	local _EchoingReprimand_4_BUFF = ConRO:Aura(ids.Ass_Buff.EchoingReprimand_4, timeShift);
+	local _EchoingReprimand_5_BUFF = ConRO:Aura(ids.Ass_Buff.EchoingReprimand_5, timeShift);
+	local _hasEnough = false;
+
+	if _EchoingReprimand_2_BUFF and _Combo == 2 then
+		_hasEnough = true;
+	end
+
+	if _EchoingReprimand_3_BUFF and _Combo == 3 then
+		_hasEnough = true;
+	end
+
+	if _EchoingReprimand_4_BUFF and _Combo == 4 then
+		_hasEnough = true;
+	end
+
+	if _EchoingReprimand_5_BUFF and _Combo == 5 then
+		_hasEnough = true;
+	end
+
+	return _hasEnough;
 end
