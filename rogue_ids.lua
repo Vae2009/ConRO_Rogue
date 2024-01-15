@@ -166,8 +166,10 @@ local ConRO_Rogue, ids = ...;
 		WoundPoison = 8679,
 	}
 	ids.Ass_Debuff = {
+		CausticSpatter = 421976,
 		CrimsonTempest = 121411,
 		DeadlyPoison = 2818,
+		Deathmark = 360194,
 		Garrote = 703,
 		Kingsbane = 385627,
 		Rupture = 1943,
