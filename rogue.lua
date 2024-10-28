@@ -214,6 +214,8 @@ function ConRO.Rogue.Assassination(_, timeShift, currentSpell, gcd, tChosen, pvp
 		local _CleartheWitnesses_BUFF = ConRO:Aura(Buff.CleartheWitnesses, timeShift);
 	local _Garrote, _Garrote_RDY = ConRO:AbilityReady(Ability.Garrote, timeShift);
 		local _Garrote_DEBUFF, _, _Garrote_DUR = ConRO:TargetAura(Debuff.Garrote, timeShift);
+		local _IndiscriminateCarnage_BUFF = ConRO:Aura(Buff.IndiscriminateCarnage, timeShift);
+		local _IndiscriminateCarnage_FORM = ConRO:Form(Form.IndiscriminateCarnage);
 	local _Kick, _Kick_RDY = ConRO:AbilityReady(Ability.Kick, timeShift);
 	local _Kingsbane, _Kingsbane_RDY = ConRO:AbilityReady(Ability.Kingsbane, timeShift);
 		local _Kingsbane_DEBUFF, _, _Kingsbane_DUR = ConRO:TargetAura(Debuff.Kingsbane, timeShift);
@@ -281,24 +283,22 @@ function ConRO.Rogue.Assassination(_, timeShift, currentSpell, gcd, tChosen, pvp
 
 --Rotations
 	for i = 1, 2, 1 do
-		if _combat_stealth then
-			if _Ambush_RDY and ConRO:HeroSpec(HeroSpec.Deathstalker) then
-				tinsert(ConRO.SuggestedSpells, _Ambush);
-				_Ambush_RDY = false;
-				_Combo = _Combo + 2;
-			end
+		if _Ambush_RDY and _combat_stealth and ConRO:HeroSpec(HeroSpec.Deathstalker) then
+			tinsert(ConRO.SuggestedSpells, _Ambush);
+			_Ambush_RDY = false;
+			_Combo = _Combo + 2;
+		end
 
-			if _Rupture_RDY and not _Rupture_DEBUFF and _Combo >= 4 then
-				tinsert(ConRO.SuggestedSpells, _Rupture);
-				_Rupture_DEBUFF = true;
-				_Combo = 0;
-			end
+		if _Rupture_RDY and (_combat_stealth or _IndiscriminateCarnage_BUFF or _IndiscriminateCarnage_FORM) and not _Rupture_DEBUFF and _Combo >= 4 then
+			tinsert(ConRO.SuggestedSpells, _Rupture);
+			_Rupture_DEBUFF = true;
+			_Combo = 0;
+		end
 
-			if _Garrote_RDY and not _Garrote_DEBUFF then
-				tinsert(ConRO.SuggestedSpells, _Garrote);
-				_Garrote_DEBUFF = true;
-				_Combo = _Combo + 1;
-			end
+		if _Garrote_RDY and (_combat_stealth or _IndiscriminateCarnage_BUFF or _IndiscriminateCarnage_FORM) and not _Garrote_DEBUFF then
+			tinsert(ConRO.SuggestedSpells, _Garrote);
+			_Garrote_DEBUFF = true;
+			_Combo = _Combo + 1;
 		end
 
 		if not _in_combat then
@@ -373,11 +373,6 @@ function ConRO.Rogue.Assassination(_, timeShift, currentSpell, gcd, tChosen, pvp
 			tinsert(ConRO.SuggestedSpells, _Shiv);
 			_Shiv_CHARGES = _Shiv_CHARGES - 1;
 			_Shiv_RDY = false;
-		end
-
-		if _ThistleTea_RDY and _Shiv_DEBUFF and _Energy < _Energy_Max - 110 and _Kingsbane_RDY then
-			tinsert(ConRO.SuggestedSpells, _ThistleTea);
-			_Energy = _Energy + 100;
 		end
 
 		if _Kingsbane_RDY and (_Deathmark_DEBUFF or _Deathmark_CD > 45) and ConRO:FullMode(_Kingsbane) then

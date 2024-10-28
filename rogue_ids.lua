@@ -184,6 +184,7 @@ local ConRO_Rogue, ids = ...;
 	}
 	ids.Ass_Form = {
 		Stealth = 1784,
+		IndiscriminateCarnage = 385754,
 	}
 	ids.Ass_Buff = {
 		AmplifyingPoison = 381664,
@@ -195,6 +196,7 @@ local ConRO_Rogue, ids = ...;
 		EchoingReprimand = 470671,
 		ElaboratePlanning = 193641,
 		Envenom = 32645,
+		IndiscriminateCarnage = 385747,
 		InstantPoison = 315584,
 		InternalBleeding = 154953,
 		MasterAssassin = 256735,
