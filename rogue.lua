@@ -369,7 +369,7 @@ function ConRO.Rogue.Assassination(_, timeShift, currentSpell, gcd, tChosen, pvp
 			_Deathmark_RDY = false;
 		end
 
-		if _Shiv_RDY and not _Shiv_DEBUFF and ((_Shiv_CHARGES >= 2 and _Kingsbane_RDY) or (_Shiv_CHARGES >= 1 and _Kingsbane_DUR <= 8.5)) then
+		if _Shiv_RDY and not _Shiv_DEBUFF and ((_Shiv_CHARGES >= 2 and _Kingsbane_RDY) or (_Shiv_CHARGES >= 1 and _Kingsbane_BUFF and _Kingsbane_DUR <= 8.5)) then
 			tinsert(ConRO.SuggestedSpells, _Shiv);
 			_Shiv_CHARGES = _Shiv_CHARGES - 1;
 			_Shiv_RDY = false;
@@ -491,7 +491,7 @@ function ConRO.Rogue.Outlaw(_, timeShift, currentSpell, gcd, tChosen, pvpChosen)
 
 --Conditions
 	local _is_stealthed = IsStealthed();
-	local _combat_stealth = _is_stealthed or _Vanish_BUFF or _Shadowmeld_BUFF;
+	local _combat_stealth = _is_stealthed or _Vanish_BUFF or _Shadowmeld_BUFF or _Subterfuge_BUFF;
 	if _Player_Level <= 21 then
 		_Dispatch, _Dispatch_RDY = _Eviscerate, _Eviscerate_RDY;
 	end

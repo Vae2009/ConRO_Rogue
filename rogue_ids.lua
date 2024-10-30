@@ -192,6 +192,7 @@ local ConRO_Rogue, ids = ...;
 		CleartheWitnesses = 457178,
 		CrimsonTempest = 121411,
 		CripplingPoison = 3408,
+		DarkestNight = 457280,
 		DeadlyPoison = 2823,
 		EchoingReprimand = 470671,
 		ElaboratePlanning = 193641,
