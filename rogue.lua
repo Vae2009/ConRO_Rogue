@@ -203,6 +203,7 @@ function ConRO.Rogue.Assassination(_, timeShift, currentSpell, gcd, tChosen, pvp
 --Abilities
 	local _Ambush, _Ambush_RDY = ConRO:AbilityReady(Ability.Ambush, timeShift);
 		local _Blindside_BUFF = ConRO:Aura(Buff.Blindside, timeShift);
+		local _DeathstalkersMark_DEBUFF = ConRO:TargetAura(Debuff.DeathstalkersMark, timeShift);
 	local _ColdBlood, _ColdBlood_RDY = ConRO:AbilityReady(Ability.ColdBlood, timeShift);
 	local _CrimsonTempest, _CrimsonTempest_RDY = ConRO:AbilityReady(Ability.CrimsonTempest, timeShift);
 		local _CrimsonTempest_DEBUFF = ConRO:TargetAura(Debuff.CrimsonTempest, timeShift + 2);
@@ -283,7 +284,7 @@ function ConRO.Rogue.Assassination(_, timeShift, currentSpell, gcd, tChosen, pvp
 
 --Rotations
 	for i = 1, 2, 1 do
-		if _Ambush_RDY and _combat_stealth and ConRO:HeroSpec(HeroSpec.Deathstalker) then
+		if _Ambush_RDY and _Combo <= _Combo_Max - 2 and not _DeathstalkersMark_DEBUFF and _combat_stealth and ConRO:HeroSpec(HeroSpec.Deathstalker) then
 			tinsert(ConRO.SuggestedSpells, _Ambush);
 			_Ambush_RDY = false;
 			_Combo = _Combo + 2;
@@ -369,7 +370,7 @@ function ConRO.Rogue.Assassination(_, timeShift, currentSpell, gcd, tChosen, pvp
 			_Deathmark_RDY = false;
 		end
 
-		if _Shiv_RDY and not _Shiv_DEBUFF and ((_Shiv_CHARGES >= 2 and _Kingsbane_RDY) or (_Shiv_CHARGES >= 1 and _Kingsbane_BUFF and _Kingsbane_DUR <= 8.5)) then
+		if _Shiv_RDY and not _Shiv_DEBUFF and ((_Shiv_CHARGES >= 2 and _Kingsbane_RDY) or (_Kingsbane_DEBUFF and _Kingsbane_DUR <= 8.5)) then
 			tinsert(ConRO.SuggestedSpells, _Shiv);
 			_Shiv_CHARGES = _Shiv_CHARGES - 1;
 			_Shiv_RDY = false;

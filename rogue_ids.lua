@@ -213,6 +213,7 @@ local ConRO_Rogue, ids = ...;
 		CrimsonTempest = 121411,
 		DeadlyPoison = 2818,
 		Deathmark = 360194,
+		DeathstalkersMark = 457129,
 		Garrote = 703,
 		Kingsbane = 385627,
 		Rupture = 1943,
