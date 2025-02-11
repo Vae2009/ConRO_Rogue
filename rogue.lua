@@ -277,7 +277,7 @@ function ConRO.Rogue.Assassination(_, timeShift, currentSpell, gcd, tChosen, pvp
 	ConRO:AbilityBurst(_Deathmark, _Deathmark_RDY and _Garrote_DEBUFF and _Combo >= 4 and ConRO:BurstMode(_Deathmark));
 	ConRO:AbilityBurst(_Kingsbane, _Kingsbane_RDY and (_Deathmark_DEBUFF or _Deathmark_CD > 55) and _Shiv_CHARGES >= 1 and _Combo >= 4 and ConRO:BurstMode(_Kingsbane));
 	ConRO:AbilityBurst(_ThistleTea, _ThistleTea_RDY and _ThistleTea_CHARGES >= 1 and _Energy <= _Energy_Max - 125);
-	ConRO:AbilityBurst(_Vanish, _Vanish_RDY and not _combat_stealth and not _MasterAssassin_BUFF and _Deathmark_RDY and _Garrote_DUR <= 3 and not ConRO:TarYou() and ConRO:BurstMode(_Vanish));
+	ConRO:AbilityBurst(_Vanish, _Vanish_RDY and not _combat_stealth and not _MasterAssassin_BUFF and _Deathmark_RDY and _Garrote_DUR <= 3 and not ConRO:IsSolo() and ConRO:BurstMode(_Vanish));
 
 --Warnings
 	ConRO:Warnings("Put lethal poison on your weapon!", not _Poison_applied and (_in_combat or _is_stealthed));
@@ -359,7 +359,7 @@ function ConRO.Rogue.Assassination(_, timeShift, currentSpell, gcd, tChosen, pvp
 			tinsert(ConRO.SuggestedSpells, _ColdBlood);
 		end
 
-		if _Vanish_RDY and not _combat_stealth and not _MasterAssassin_BUFF and _Garrote_DUR <= 3 and not ConRO:TarYou() and ConRO:FullMode(_Vanish) then
+		if _Vanish_RDY and ConRO:IsSolo() and not _combat_stealth and not _MasterAssassin_BUFF and _Garrote_DUR <= 3 and not ConRO:TarYou() and ConRO:FullMode(_Vanish) then
 			tinsert(ConRO.SuggestedSpells, _Vanish);
 			_Vanish_RDY = false;
 			_combat_stealth = true;
@@ -552,8 +552,8 @@ function ConRO.Rogue.Outlaw(_, timeShift, currentSpell, gcd, tChosen, pvpChosen)
 	ConRO:AbilityBurst(_BladeRush, _BladeRush_RDY and (((ConRO_AutoButton:IsVisible() and _enemies_in_melee == 1) or ConRO_SingleButton:IsVisible()) or (_BladeFlurry_BUFF and ((ConRO_AutoButton:IsVisible() and _enemies_in_melee >= 2) or ConRO_AoEButton:IsVisible()))) and ConRO:BurstMode(_BladeRush));
 	ConRO:AbilityBurst(_KillingSpree, _KillingSpree_RDY and not _AdrenalineRush_BUFF and _Energy <= _Energy_Max - 35 and (((ConRO_AutoButton:IsVisible() and _enemies_in_melee == 1) or ConRO_SingleButton:IsVisible()) or (_BladeFlurry_BUFF and ((ConRO_AutoButton:IsVisible() and _enemies_in_melee >= 2) or ConRO_AoEButton:IsVisible()))) and ConRO:BurstMode(_KillingSpree));
 	ConRO:AbilityBurst(_RolltheBones, _RolltheBones_RDY and _should_Roll and ConRO:BurstMode(_RolltheBones));
-	ConRO:AbilityBurst(_Vanish, _Vanish_RDY and not _combat_stealth and not ConRO:TarYou() and _Combo <= 1 and _Energy >= 50);
-	ConRO:AbilityBurst(_Shadowmeld, _Shadowmeld_RDY and not _combat_stealth and not ConRO:TarYou() and _Combo <= 1 and _Energy >= 50);
+	ConRO:AbilityBurst(_Vanish, _Vanish_RDY and not _combat_stealth and not ConRO:IsSolo() and _Combo <= 1 and _Energy >= 50);
+	ConRO:AbilityBurst(_Shadowmeld, _Shadowmeld_RDY and not _combat_stealth and not ConRO:IsSolo() and _Combo <= 1 and _Energy >= 50);
 	ConRO:AbilityBurst(_ThistleTea, _ThistleTea_RDY and _ThistleTea_CHARGES >= 1 and _Energy <= 50);
 
 --Warnings
@@ -661,7 +661,7 @@ function ConRO.Rogue.Outlaw(_, timeShift, currentSpell, gcd, tChosen, pvpChosen)
 			_BladeRush_RDY = false;
 		end
 
-		if _Vanish_RDY and _Combo >= (_Combo_Max - 1) and not _Subterfuge_BUFF and (_AdrenalineRush_DUR <= 3 or _Vanish_CHARGES >= 2 or (not _BetweentheEyes_RDY and _RolltheBones_BUFF.RuthlessPrecision)) and ConRO:FullMode(_Vanish) then
+		if _Vanish_RDY and not ConRO:IsSolo() and _Combo >= (_Combo_Max - 1) and not _Subterfuge_BUFF and (_AdrenalineRush_DUR <= 3 or _Vanish_CHARGES >= 2 or (not _BetweentheEyes_RDY and _RolltheBones_BUFF.RuthlessPrecision)) and ConRO:FullMode(_Vanish) then
 			tinsert(ConRO.SuggestedSpells, _Vanish);
 			_Vanish_RDY = false;
 		end
@@ -804,9 +804,9 @@ function ConRO.Rogue.Subtlety(_, timeShift, currentSpell, gcd, tChosen, pvpChose
 	ConRO:AbilityBurst(_SecretTechnique, _SecretTechnique_RDY and (_SymbolsofDeath_BUFF or (not _SymbolsofDeath_BUFF and _SymbolsofDeath_CD > 5)) and (_Combo >= (_Combo_Max - 1) or _EchoingReprimand_Match) and ConRO:BurstMode(_SecretTechnique));
 	ConRO:AbilityBurst(_ShadowBlades, _ShadowBlades_RDY and _SymbolsofDeath_BUFF and ConRO:BurstMode(_ShadowBlades));
 	ConRO:AbilityBurst(_ShadowDance, _ShadowDance_RDY and not _combat_stealth and _SymbolsofDeath_BUFF and ConRO:BurstMode(_ShadowDance));
-	ConRO:AbilityBurst(_Shadowmeld, _Shadowmeld_RDY and not ConRO:TarYou() and not _combat_stealth and not _FindWeakness_DEBUFF and _Combo <= 0);
+	ConRO:AbilityBurst(_Shadowmeld, _Shadowmeld_RDY and not ConRO:IsSolo() and not _combat_stealth and not _FindWeakness_DEBUFF and _Combo <= 0);
 	ConRO:AbilityBurst(_ShurikenTornado, _ShurikenTornado_RDY and _SymbolsofDeath_BUFF and ConRO:BurstMode(_ShurikenTornado));
-	ConRO:AbilityBurst(_Vanish, _Vanish_RDY and not ConRO:TarYou() and not _combat_stealth and _Energy >= 45 and _Combo <= 1)
+	ConRO:AbilityBurst(_Vanish, _Vanish_RDY and not ConRO:IsSolo() and not _combat_stealth and _Energy >= 45 and _Combo <= 1)
 
 --Warnings
 	ConRO:Warnings("Put lethal poison on your weapon!", not _Poison_applied and (_in_combat or _is_stealthed));
@@ -853,7 +853,7 @@ function ConRO.Rogue.Subtlety(_, timeShift, currentSpell, gcd, tChosen, pvpChose
 			_combat_stealth = true;
 		end
 
-		if _Vanish_RDY and not _combat_stealth and _Combo <= 1 and ConRO:FullMode(_Vanish) then
+		if _Vanish_RDY and not ConRO:IsSolo() and not _combat_stealth and _Combo <= 1 and ConRO:FullMode(_Vanish) then
 			tinsert(ConRO.SuggestedSpells, _Vanish);
 			_combat_stealth = true;
 			_Vanish_RDY = false;
